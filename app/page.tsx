@@ -1,28 +1,30 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import { motion, useScroll, useSpring } from "framer-motion";
+import dynamic from "next/dynamic";
 
 const HeroSection = dynamic(() => import("@/components/hero/HeroSection"), {
   ssr: false,
 });
-
 const Terminal = dynamic(() => import("@/components/terminal/Terminal"), {
   ssr: false,
 });
-
 const InsightFlow = dynamic(() => import("@/components/flow/InsightFlow"), {
   ssr: false,
 });
-
-const Dashboard = dynamic(() => import("@/components/dashboard/Dashboard"), {
-  ssr: false,
-});
-
-const SignatureInteraction = dynamic(() => import("@/components/signature/SignatureInteraction"), {
-  ssr: false,
-});
+const Dashboard = dynamic(
+  () => import("@/components/dashboard/Dashboard").then((mod) => mod.Dashboard),
+  {
+    ssr: false,
+  },
+);
+const SignatureInteraction = dynamic(
+  () => import("@/components/signature/SignatureInteraction"),
+  {
+    ssr: false,
+  },
+);
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -42,7 +44,9 @@ export default function Home() {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-zinc-500 font-bold">Loading Intelligence Core...</p>
+          <p className="text-zinc-500 font-bold">
+            Loading Intelligence Core...
+          </p>
         </div>
       </div>
     );
@@ -55,7 +59,7 @@ export default function Home() {
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 origin-left z-50"
         style={{ scaleX }}
       />
-      
+
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-black/50 border-b border-zinc-900">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -70,25 +74,40 @@ export default function Home() {
               </span>
             </div>
           </div>
-          
+
           <div className="hidden md:flex gap-8 text-sm font-bold">
-            <a href="#hero" className="text-zinc-400 hover:text-white transition-colors">
+            <a
+              href="#hero"
+              className="text-zinc-400 hover:text-white transition-colors"
+            >
               Home
             </a>
-            <a href="#terminal" className="text-zinc-400 hover:text-white transition-colors">
+            <a
+              href="#terminal"
+              className="text-zinc-400 hover:text-white transition-colors"
+            >
               Terminal
             </a>
-            <a href="#flow" className="text-zinc-400 hover:text-white transition-colors">
+            <a
+              href="#flow"
+              className="text-zinc-400 hover:text-white transition-colors"
+            >
               Pipeline
             </a>
-            <a href="#dashboard" className="text-zinc-400 hover:text-white transition-colors">
+            <a
+              href="#dashboard"
+              className="text-zinc-400 hover:text-white transition-colors"
+            >
               Dashboard
             </a>
-            <a href="#signature" className="text-zinc-400 hover:text-white transition-colors">
+            <a
+              href="#signature"
+              className="text-zinc-400 hover:text-white transition-colors"
+            >
               3D Mesh
             </a>
           </div>
-          
+
           <button className="px-6 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg font-bold text-sm transition-all hover:scale-105">
             Launch App
           </button>
@@ -101,7 +120,10 @@ export default function Home() {
       </div>
 
       {/* Terminal Section - AI Chat Interface */}
-      <section id="terminal" className="relative py-32 px-6 bg-gradient-to-b from-black via-zinc-950 to-black">
+      <section
+        id="terminal"
+        className="relative py-32 px-6 bg-gradient-to-b from-black via-zinc-950 to-black"
+      >
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -118,13 +140,14 @@ export default function Home() {
               <span className="text-gradient">Interface</span>
             </h2>
             <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed">
-              Communicate with Xai's architectural core. Ask about data pipelines, model architectures, or strategic insights.
+              Communicate with Xai's architectural core. Ask about data
+              pipelines, model architectures, or strategic insights.
             </p>
           </motion.div>
-          
+
           <Terminal />
         </div>
-        
+
         <div className="absolute top-1/4 left-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
       </section>
@@ -159,7 +182,7 @@ export default function Home() {
                 </span>
               </div>
             </div>
-            
+
             <div className="flex gap-12 text-sm font-bold text-zinc-500">
               <a href="#" className="hover:text-white transition-colors">
                 Documentation
@@ -175,7 +198,7 @@ export default function Home() {
               </a>
             </div>
           </div>
-          
+
           <div className="pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-zinc-600 text-sm font-medium">
               © 2025 Xai Architecture Labs. Built for Excellence.

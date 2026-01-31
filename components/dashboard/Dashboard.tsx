@@ -1,193 +1,173 @@
-"use client";
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, AreaChart, Area, CartesianGrid } from 'recharts';
 
-import { motion } from "framer-motion";
-import { useState } from "react";
-
-const metrics = [
-  { label: "Active Models", value: "47", change: "+12%", trend: "up" },
-  { label: "Insights Generated", value: "1,284", change: "+23%", trend: "up" },
-  { label: "Data Sources", value: "18", change: "+3", trend: "up" },
-  { label: "Processing Speed", value: "2.4s", change: "-18%", trend: "down" },
+const data = [
+  { name: '08:00', throughput: 420, efficiency: 88 },
+  { name: '10:00', throughput: 580, efficiency: 92 },
+  { name: '12:00', throughput: 900, efficiency: 84 },
+  { name: '14:00', throughput: 720, efficiency: 95 },
+  { name: '16:00', throughput: 850, efficiency: 91 },
+  { name: '18:00', throughput: 1100, efficiency: 98 },
+  { name: '20:00', throughput: 950, efficiency: 94 },
 ];
 
-const insights = [
-  {
-    title: "Revenue Trend Acceleration",
-    source: "Sales Analytics",
-    metric: "+24.5%",
-    trend: "up",
-    time: "2h ago",
-    priority: "high",
-  },
-  {
-    title: "Customer Churn Risk",
-    source: "CRM Intelligence",
-    metric: "8.2%",
-    trend: "down",
-    time: "4h ago",
-    priority: "medium",
-  },
-  {
-    title: "Market Sentiment Shift",
-    source: "Social Signals",
-    metric: "+12.8%",
-    trend: "up",
-    time: "6h ago",
-    priority: "high",
-  },
-];
+export const Dashboard: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('Workspace');
 
-function MetricCard({ metric, index }: { metric: typeof metrics[0]; index: number }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      className="bg-zinc-950 border border-zinc-800 rounded-xl p-6"
-    >
-      <div className="text-xs text-zinc-500 font-bold uppercase tracking-wider mb-2">
-        {metric.label}
-      </div>
-      <div className="flex items-end gap-3">
-        <div className="text-4xl font-black">{metric.value}</div>
-        <div className={`text-sm font-bold mb-1 ${metric.trend === 'up' ? 'text-green-500' : 'text-blue-500'}`}>
-          {metric.change}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-function InsightCard({ insight, index }: { insight: typeof insights[0]; index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className="bg-zinc-950 border border-zinc-800 hover:border-indigo-500/50 rounded-xl p-6 cursor-pointer transition-all group"
-    >
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <h3 className="font-bold text-lg group-hover:text-indigo-400 transition-colors">
-              {insight.title}
-            </h3>
-            {insight.priority === 'high' && (
-              <span className="px-2 py-1 bg-red-500/10 border border-red-500/20 rounded text-xs font-bold text-red-400">
-                HIGH
-              </span>
-            )}
+    <div className="w-full h-full bg-zinc-950 rounded-2xl border border-white/10 overflow-hidden shadow-3xl flex flex-col md:flex-row">
+      {/* Sidebar Navigation - High Density */}
+      <aside className="w-full md:w-60 border-b md:border-b-0 md:border-r border-white/5 flex flex-col bg-zinc-900/20">
+        <div className="p-6 border-b border-white/5">
+          <div className="flex items-center gap-3">
+            <div className="w-6 h-6 rounded bg-indigo-500 flex items-center justify-center">
+              <span className="text-[10px] font-bold">A</span>
+            </div>
+            <span className="text-xs font-bold uppercase tracking-widest">Alpha-Node</span>
           </div>
-          <p className="text-sm text-zinc-500">{insight.source}</p>
         </div>
-        <div className={`text-3xl font-black ${insight.trend === 'up' ? 'text-green-500' : 'text-blue-500'}`}>
-          {insight.metric}
-        </div>
-      </div>
-      
-      <div className="h-20 bg-zinc-900 rounded-lg flex items-end gap-1 p-3 mb-4">
-        {[35, 45, 40, 65, 55, 80, 70, 85, 75, 90].map((height, i) => (
-          <div
-            key={i}
-            className="flex-1 bg-gradient-to-t from-indigo-500 to-indigo-400 rounded-sm transition-all group-hover:from-indigo-400 group-hover:to-indigo-300"
-            style={{ height: `${height}%` }}
-          />
-        ))}
-      </div>
-      
-      <div className="flex items-center justify-between text-xs">
-        <span className="text-zinc-600">{insight.time}</span>
-        <button className="text-indigo-400 font-bold hover:text-indigo-300 transition-colors">
-          View Details →
-        </button>
-      </div>
-    </motion.div>
-  );
-}
-
-export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState("insights");
-
-  return (
-    <section className="relative py-32 px-6 bg-gradient-to-b from-black via-zinc-950 to-black">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
-        >
-          <span className="inline-block px-4 py-2 rounded-full border border-zinc-800 bg-zinc-900/50 text-xs font-bold uppercase tracking-[0.3em] text-zinc-500 mb-8">
-            Command Center
-          </span>
-          <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-8">
-            <span className="text-white">Intelligence</span>
-            <br />
-            <span className="text-gradient">Dashboard</span>
-          </h2>
-        </motion.div>
         
-        <div className="flex gap-8">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="w-64 bg-zinc-950 border border-zinc-800 rounded-2xl p-6 h-fit"
-          >
-            <div className="mb-8">
-              <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4">
-                <span className="text-black font-black text-2xl">X</span>
-              </div>
-              <div className="text-sm font-bold text-zinc-500 uppercase tracking-wider">
-                Workspace
-              </div>
-            </div>
-            
-            {["Insights", "Models", "Data", "Analytics", "Settings"].map((item) => (
-              <button
-                key={item}
-                onClick={() => setActiveTab(item.toLowerCase())}
-                className={`w-full text-left px-4 py-3 rounded-lg mb-2 font-bold transition-all ${
-                  activeTab === item.toLowerCase()
-                    ? "bg-indigo-500 text-white"
-                    : "text-zinc-500 hover:text-white hover:bg-zinc-900"
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </motion.div>
-          
-          <div className="flex-1">
-            <div className="grid grid-cols-4 gap-4 mb-8">
-              {metrics.map((metric, index) => (
-                <MetricCard key={index} metric={metric} index={index} />
-              ))}
-            </div>
-            
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="mb-8 flex items-center justify-between"
+        <nav className="flex-1 p-4 space-y-1">
+          {['Workspace', 'Synthetics', 'Library', 'Automations', 'Settings'].map((item) => (
+            <button
+              key={item}
+              onClick={() => setActiveTab(item)}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-xs font-medium transition-all ${
+                activeTab === item 
+                ? 'bg-white/10 text-white border border-white/5' 
+                : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+              }`}
             >
-              <h3 className="text-3xl font-black">Recent Intelligence</h3>
-              <button className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-lg font-bold transition-all hover:scale-105">
-                Generate New
-              </button>
-            </motion.div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {insights.map((insight, index) => (
-                <InsightCard key={index} insight={insight} index={index} />
-              ))}
+              <div className={`w-1 h-1 rounded-full ${activeTab === item ? 'bg-indigo-400' : 'bg-transparent'}`} />
+              {item}
+            </button>
+          ))}
+        </nav>
+
+        <div className="p-6 mt-auto border-t border-white/5">
+          <div className="p-4 rounded-xl bg-indigo-500/5 border border-indigo-500/10">
+            <div className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1">Compute Load</div>
+            <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+              <div className="h-full w-2/3 bg-indigo-500 rounded-full" />
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </aside>
+
+      {/* Main Panel */}
+      <main className="flex-1 bg-black flex flex-col min-h-0">
+        <header className="px-8 py-5 border-b border-white/5 flex justify-between items-center">
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Environment / <span className="text-white">Main_Interface</span></h3>
+          </div>
+          <div className="flex gap-4">
+            <div className="flex -space-x-2">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="w-6 h-6 rounded-full border-2 border-black bg-zinc-800" />
+              ))}
+            </div>
+            <button className="px-4 py-1.5 bg-indigo-500 text-white text-[10px] font-bold uppercase tracking-widest rounded-md hover:bg-indigo-400">Deploy</button>
+          </div>
+        </header>
+
+        <div className="p-8 overflow-y-auto space-y-8 flex-1">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 lg:grid-cols-4 gap-6"
+            >
+              {/* Stats Grid */}
+              <div className="lg:col-span-3 space-y-6">
+                <div className="grid grid-cols-3 gap-6">
+                  <SimpleStat label="Synthesized Nodes" value="12,482" delta="+1.2%" />
+                  <SimpleStat label="Processing Latency" value="14.2ms" delta="-0.4%" />
+                  <SimpleStat label="Engine Confidence" value="99.8%" delta="+0.1%" />
+                </div>
+
+                {/* Main Graph */}
+                <div className="p-8 rounded-2xl bg-zinc-900/30 border border-white/5">
+                  <div className="flex justify-between items-center mb-10">
+                    <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-500">Resource Allocation Flux</h4>
+                    <select className="bg-transparent border-none text-[10px] font-bold text-indigo-400 uppercase tracking-widest outline-none">
+                      <option>Last 24 Hours</option>
+                    </select>
+                  </div>
+                  <div className="h-72">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={data}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
+                        <XAxis dataKey="name" stroke="#444" fontSize={10} axisLine={false} tickLine={false} />
+                        <YAxis stroke="#444" fontSize={10} axisLine={false} tickLine={false} />
+                        <Tooltip 
+                          contentStyle={{ backgroundColor: '#000', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                          itemStyle={{ fontSize: '10px', textTransform: 'uppercase' }}
+                        />
+                        <Area 
+                          type="monotone" 
+                          dataKey="throughput" 
+                          stroke="#6366f1" 
+                          fill="url(#indigoGradient)" 
+                          strokeWidth={2}
+                        />
+                        <defs>
+                          <linearGradient id="indigoGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#6366f1" stopOpacity={0.15}/>
+                            <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                          </linearGradient>
+                        </defs>
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
+
+              {/* Feed Sidebar */}
+              <div className="space-y-6">
+                <div className="p-6 rounded-2xl bg-zinc-900/30 border border-white/5">
+                  <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 mb-6">Real-time Telemetry</h4>
+                  <div className="space-y-4">
+                    <TelemetryItem status="success" label="Core-01" value="Active" />
+                    <TelemetryItem status="warning" label="Mem-Buffer" value="84%" />
+                    <TelemetryItem status="success" label="Net-Bridge" value="Stable" />
+                    <TelemetryItem status="success" label="Enc-Kernel" value="Secure" />
+                  </div>
+                </div>
+                
+                <div className="p-6 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-transparent border border-white/5">
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 mb-3">AI Suggestion</h4>
+                  <p className="text-[11px] text-zinc-400 leading-relaxed mb-4">Increase node parallelism in the Northern sector to optimize Q3 data ingestion.</p>
+                  <button className="text-[10px] font-bold text-white uppercase tracking-widest underline decoration-indigo-500/50 hover:decoration-indigo-500">Apply Patch</button>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </main>
+    </div>
   );
-}
+};
+
+const SimpleStat: React.FC<{ label: string; value: string; delta: string }> = ({ label, value, delta }) => (
+  <div className="p-5 rounded-xl bg-zinc-900/20 border border-white/5">
+    <div className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mb-2">{label}</div>
+    <div className="flex items-baseline justify-between">
+      <div className="text-xl font-bold tracking-tight">{value}</div>
+      <div className={`text-[9px] font-bold ${delta.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>{delta}</div>
+    </div>
+  </div>
+);
+
+const TelemetryItem: React.FC<{ status: 'success' | 'warning'; label: string; value: string }> = ({ status, label, value }) => (
+  <div className="flex justify-between items-center border-b border-white/5 pb-3 last:border-0 last:pb-0">
+    <div className="flex items-center gap-3">
+      <div className={`w-1.5 h-1.5 rounded-full ${status === 'success' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+      <span className="text-[10px] font-mono text-zinc-400">{label}</span>
+    </div>
+    <span className="text-[10px] font-mono font-bold text-zinc-200">{value}</span>
+  </div>
+);
