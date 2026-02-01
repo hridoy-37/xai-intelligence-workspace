@@ -21,7 +21,7 @@ const SYSTEM_RESPONSES = [
   "Automated insight generation enabled. 34 actionable recommendations surfaced from Q4 data. Priority flags: 7 high-impact opportunities.",
 ]; 
 
-export default function Terminal() {
+export default function Terminal() { 
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "system",
