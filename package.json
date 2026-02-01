@@ -19,6 +19,8 @@
     "three": "0.169.0"
   },
   "overrides": {
+    "react": "$react",
+    "react-dom": "$react-dom",
     "three-mesh-bvh": "^0.8.0"
   },
   "devDependencies": {
